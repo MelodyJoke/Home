@@ -35,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * description: load page
@@ -148,12 +147,7 @@ public class LoadActivity extends HandlerActivity {
             case 3:
                 // auto-login attempt
                 mMessageText.setText(R.string.load_auto_login);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Message.obtain(handler, 4, new Random().nextBoolean()).sendToTarget();
-                    }
-                }, 1000);
+                attemptLogin();
                 break;
 
             case 4:
@@ -272,6 +266,20 @@ public class LoadActivity extends HandlerActivity {
             }
 
         Message.obtain(handler, 2, success).sendToTarget();
+    }
+
+    /**
+     * attempt login
+     * auto-login, send true to handler if succeed, false else
+     */
+    private void attemptLogin() {
+        // TODO:
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Message.obtain(handler, 4, true).sendToTarget();
+            }
+        }, 1000);
     }
 
     @Override

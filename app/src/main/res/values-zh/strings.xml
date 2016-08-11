@@ -8,4 +8,8 @@
     <string name="load_auto_login">场地铺设中&#8230;</string>
     <string name="load_jump_success">比赛开始!</string>
     <string name="load_jump_failure">请补票&#8230;</string>
+
+    <!--webView page-->
+    <string name="web_empty_url">空链接.</string>
+    <string name="web_back">返回</string>
 </resources>
