@@ -108,6 +108,10 @@ public class LoadActivity extends HandlerActivity {
             @Override
             public void onClick(View view) {
                 // TODO:
+                Intent intent = new Intent(mContext, WebViewActivity.class);
+                intent.putExtra("url", "http://www.tara-china.cn/Introduce_Members/TARA_JIYEON/JIYEON_Wallpaper/2016/05/23/1453492858.html");
+                intent.putExtra("title", "测试");
+                startActivity(intent);
             }
         });
     }
