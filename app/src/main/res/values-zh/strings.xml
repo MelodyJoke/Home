@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">场上见</string>
+
+    <!--load page-->
+    <string name="load_load_cover">打开场馆&#8230;</string>
+    <string name="load_check_permission">检票入场&#8230;</string>
+    <string name="load_permission_deny">获取必要权限失败.</string>
+    <string name="load_auto_login">场地铺设中&#8230;</string>
+    <string name="load_jump_success">比赛开始!</string>
+    <string name="load_jump_failure">请补票&#8230;</string>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Home</string>
+
+    <!--load page-->
+    <string name="load_load_cover">Opening gate&#8230;</string>
+    <string name="load_check_permission">Checking admission ticket&#8230;</string>
+    <string name="load_permission_deny">Some permissions required are denied.</string>
+    <string name="load_auto_login">Laying count&#8230;</string>
+    <string name="load_jump_success">Game start!</string>
+    <string name="load_jump_failure">Fare adjustment please&#8230;</string>
+</resources>
