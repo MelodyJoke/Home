@@ -40,7 +40,7 @@ public abstract class BaseDbHelper {
         }
     }
 
-    protected void closeDB() {
+    public void closeDB() {
         if (db != null) db.closeDatabase();
     }
 }

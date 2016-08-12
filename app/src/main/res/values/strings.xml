@@ -23,4 +23,5 @@
     <string name="login_skip">Skip</string>
     <string name="login_service">Call</string>
     <string name="login_help">Help</string>
+    <string name="login_signing">Sign in&#8230;</string>
 </resources>

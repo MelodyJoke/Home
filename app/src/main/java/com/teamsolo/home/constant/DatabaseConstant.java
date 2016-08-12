@@ -13,15 +13,15 @@ public interface DatabaseConstant {
      * database version
      * 0: user db {@link #TABLE_USER,#TABLE_USER_FIELDS}
      */
-    int DB_VERSION = 0;
+    int DB_VERSION = 1;
 
     String TABLE_USER = "table_user";
 
     String[][] TABLE_USER_FIELDS = {
-            {"id", "int primary key autoincrement"},
+            {"id", "integer primary key autoincrement"},
             {"phone", "text not null"},
             {"password", "text"},
             {"portrait", "text"},
-            {"remember", "int default 0"}
+            {"remember", "integer default 0"}
     };
 }

@@ -1,12 +1,14 @@
 package com.teamsolo.home.structure;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -15,8 +17,10 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.melody.base.template.activity.HandlerActivity;
 import com.melody.base.util.DisplayUtility;
 import com.teamsolo.home.R;
+import com.teamsolo.home.bean.User;
 import com.teamsolo.home.constant.NetConstant;
 import com.teamsolo.home.constant.PreferenceConst;
+import com.teamsolo.home.structure.database.UserDbHelper;
 import com.teamsolo.home.structure.widget.LoadingView;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +35,6 @@ public class LoginActivity extends HandlerActivity {
 
     private LoadingView mLoadingView;
 
-    private View mContentView;
-
     private SimpleDraweeView mPortraitImage;
 
     private AutoCompleteTextView mPhoneEdit;
@@ -44,8 +46,6 @@ public class LoginActivity extends HandlerActivity {
     private View mSkipButton, mServiceButton, mHelpButton;
 
     private String phone;
-
-    private boolean loadPassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +62,6 @@ public class LoginActivity extends HandlerActivity {
     @Override
     protected void getBundle(@NotNull Intent intent) {
         phone = PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceConst.LOGIN_PHONE, "");
-        loadPassword = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean(PreferenceConst.LOGIN_PASSWORD_REMEMBER, false);
     }
 
     @Override
@@ -71,7 +70,6 @@ public class LoginActivity extends HandlerActivity {
         setSupportActionBar(toolbar);
 
         mLoadingView = (LoadingView) findViewById(R.id.loading);
-        mContentView = findViewById(R.id.content);
 
         mPortraitImage = (SimpleDraweeView) findViewById(R.id.portrait);
         mPhoneEdit = (AutoCompleteTextView) findViewById(R.id.phone);
@@ -83,9 +81,9 @@ public class LoginActivity extends HandlerActivity {
         mServiceButton = findViewById(R.id.service);
         mHelpButton = findViewById(R.id.help);
 
-        mContentView.setVisibility(View.GONE);
-        mLoadingView.show();
-
+        mLoadingView.setReactView(findViewById(R.id.content));
+        mLoadingView.configHint(getString(R.string.login_signing));
+        mLoadingView.show(true);
         mPhoneEdit.setText(DisplayUtility.showString(phone, ""));
     }
 
@@ -131,36 +129,48 @@ public class LoginActivity extends HandlerActivity {
     }
 
     /**
-     * load password from db if {@link #loadPassword} is true
+     * load password from db
      * load portrait
      */
     private void loadUserInfo() {
-        // TODO: load password
-        if (loadPassword) {
-            // TODO:
-        } else {
+        if (TextUtils.isEmpty(phone)) {
             mLoadingView.dismiss();
-            mContentView.setVisibility(View.VISIBLE);
+            return;
         }
 
-        // TODO: load portrait
+        mPhoneEdit.setText(phone);
+
+        UserDbHelper helper = new UserDbHelper(mContext);
+        User user = helper.getUser(phone);
+
+        if (user.rememberPassword) mPasswordEdit.setText(user.password);
+        if (!TextUtils.isEmpty(user.portrait)) mPortraitImage.setImageURI(Uri.parse(user.portrait));
+
+        mLoadingView.dismiss();
     }
 
     /**
      * attempt login
      */
     private void attemptLogin() {
-        // TODO:
         mLoginButton.setClickable(false);
-        mContentView.setVisibility(View.GONE);
-        mLoadingView.show();
+        mLoadingView.show(true);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                String phone = mPhoneEdit.getText().toString();
+                String password = mPasswordEdit.getText().toString();
+
+                User user = new User(phone, password, "", true);
+                UserDbHelper helper = new UserDbHelper(mContext);
+                helper.insert(user);
+
+                PreferenceManager.getDefaultSharedPreferences(mContext).edit()
+                        .putString(PreferenceConst.LOGIN_PHONE, phone).apply();
+
                 mLoginButton.setClickable(true);
                 mLoadingView.dismiss();
-                mContentView.setVisibility(View.VISIBLE);
             }
         }, 1500);
     }

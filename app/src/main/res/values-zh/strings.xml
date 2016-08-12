@@ -23,4 +23,5 @@
     <string name="login_skip">跳过</string>
     <string name="login_service">联系客服</string>
     <string name="login_help">帮助中心</string>
+    <string name="login_signing">登录&#8230;</string>
 </resources>
