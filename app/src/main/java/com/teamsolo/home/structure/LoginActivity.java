@@ -9,9 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.melody.base.template.activity.HandlerActivity;
@@ -93,6 +96,14 @@ public class LoginActivity extends HandlerActivity {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        mPasswordEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) attemptLogin();
+                return true;
             }
         });
 
