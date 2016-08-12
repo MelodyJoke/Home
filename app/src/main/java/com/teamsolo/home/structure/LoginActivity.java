@@ -56,7 +56,7 @@ public class LoginActivity extends HandlerActivity {
         initViews();
         bindListeners();
 
-        loadPassword();
+        loadUserInfo();
     }
 
     @Override
@@ -132,14 +132,18 @@ public class LoginActivity extends HandlerActivity {
 
     /**
      * load password from db if {@link #loadPassword} is true
+     * load portrait
      */
-    private void loadPassword() {
+    private void loadUserInfo() {
+        // TODO: load password
         if (loadPassword) {
             // TODO:
         } else {
             mLoadingView.dismiss();
             mContentView.setVisibility(View.VISIBLE);
         }
+
+        // TODO: load portrait
     }
 
     /**
