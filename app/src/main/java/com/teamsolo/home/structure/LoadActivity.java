@@ -109,7 +109,7 @@ public class LoadActivity extends HandlerActivity {
             public void onClick(View view) {
                 // TODO:
                 Intent intent = new Intent(mContext, WebViewActivity.class);
-                intent.putExtra("url", "http://www.tara-china.cn/Introduce_Members/TARA_JIYEON/JIYEON_Wallpaper/2016/05/23/1453492858.html");
+                intent.putExtra("url", "app:login");
                 intent.putExtra("title", "测试");
                 startActivity(intent);
             }
@@ -165,6 +165,7 @@ public class LoadActivity extends HandlerActivity {
                         @Override
                         public void run() {
                             // TODO:
+                            finish();
                         }
                     }, 500);
                 } else {
@@ -172,7 +173,8 @@ public class LoadActivity extends HandlerActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // TODO:
+                            startActivity(new Intent(mContext, LoginActivity.class));
+                            finish();
                         }
                     }, 500);
                 }
@@ -281,7 +283,7 @@ public class LoadActivity extends HandlerActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Message.obtain(handler, 4, true).sendToTarget();
+                Message.obtain(handler, 4, false).sendToTarget();
             }
         }, 1000);
     }

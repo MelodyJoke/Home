@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.melody.base.template.application.BaseApplication;
@@ -80,5 +81,16 @@ public final class DisplayUtility {
     public static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+    }
+
+    /**
+     * display string
+     *
+     * @param source the src string
+     * @param fix    the fix string while the source string is empty
+     * @return the result
+     */
+    public static String showString(String source, String fix) {
+        return !TextUtils.isEmpty(source) ? source : TextUtils.isEmpty(fix) ? "" : fix;
     }
 }

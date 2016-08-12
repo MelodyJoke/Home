@@ -50,6 +50,13 @@
         <activity
             android:name=".structure.WebViewActivity"
             android:configChanges="orientation|locale|screenSize|layoutDirection" />
+
+        <!--login page-->
+        <activity
+            android:name=".structure.LoginActivity"
+            android:configChanges="orientation|locale|screenSize|layoutDirection"
+            android:label="@string/login_title"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
     </application>
 
 </manifest>

@@ -215,10 +215,9 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
         else if (TextUtils.equals("app:refresh", url) && !mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(true);
             onRefresh();
-        }
-        else if (TextUtils.equals("app:login", url)) {
-            // TODO:
-        }
-        else mWebView.loadUrl(url);
+        } else if (TextUtils.equals("app:login", url)) {
+            startActivity(new Intent(mContext, LoginActivity.class));
+            finish();
+        } else mWebView.loadUrl(url);
     }
 }
