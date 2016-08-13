@@ -1,4 +1,4 @@
-package com.teamsolo.home.structure;
+package com.teamsolo.home.structure.page;
 
 import android.Manifest;
 import android.animation.ArgbEvaluator;
@@ -29,7 +29,9 @@ import com.melody.base.template.activity.HandlerActivity;
 import com.melody.base.util.BuildUtility;
 import com.melody.base.util.FileManager;
 import com.teamsolo.home.R;
+import com.teamsolo.home.bean.User;
 import com.teamsolo.home.constant.PreferenceConst;
+import com.teamsolo.home.structure.database.UserDbHelper;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -323,19 +325,26 @@ public class LoadActivity extends HandlerActivity {
      * auto-login, send true to handler if succeed, false else
      */
     private void attemptLogin() {
-        // TODO:
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Message.obtain(handler, 4, false).sendToTarget();
+        String phone = PreferenceManager.getDefaultSharedPreferences(mContext)
+                .getString(PreferenceConst.LOGIN_PHONE, "");
+        UserDbHelper helper = new UserDbHelper(mContext);
+        if (!TextUtils.isEmpty(phone)) {
+            User user = helper.getUser(phone);
+            if (user != null && user.rememberPassword && !TextUtils.isEmpty(user.password)) {
+                // TODO: http request here
+                Message.obtain(handler, 4, true).sendToTarget();
+                return;
             }
-        }, 1000);
+        }
+
+        Message.obtain(handler, 4, false).sendToTarget();
     }
 
     /**
      * attempt jump
      */
     private void attemptJump() {
+        System.out.println("attemptJump: " + (jumpToLogin ? "login" : "main") + " " + showComplete + " & " + loginComplete + " & " + jumpComplete);
         if (!showComplete || !loginComplete || !jumpComplete) return;
 
         if (jumpToLogin) startActivity(new Intent(mContext, LoginActivity.class));
@@ -351,8 +360,10 @@ public class LoadActivity extends HandlerActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                jumpComplete = true;
-                attemptJump();
+                if (!jumpComplete) {
+                    jumpComplete = true;
+                    attemptJump();
+                }
             }
         }, 300);
     }

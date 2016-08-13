@@ -1,4 +1,4 @@
-package com.teamsolo.home.structure;
+package com.teamsolo.home.structure.page;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -219,17 +219,27 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
      */
     protected void filterUrl(String url) {
         try {
-            if (TextUtils.equals("http://app:finish", url)) {
+            // call js function
+            if (url.startsWith("javascript:")) mWebView.loadUrl(url);
+                // finish this page
+            else if (TextUtils.equals("http://app:finish", url)) {
                 if (BuildUtility.isRequired(Build.VERSION_CODES.LOLLIPOP)) finishAfterTransition();
                 else finish();
-            } else if (TextUtils.equals("http://app:back", url)) onBackPressed();
+            }
+            // back to last page
+            else if (TextUtils.equals("http://app:back", url)) onBackPressed();
+                // refresh this page
             else if (TextUtils.equals("http://app:refresh", url) && !mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(true);
                 onRefresh();
-            } else if (TextUtils.equals("http://app:login", url)) {
+            }
+            // jump to login page
+            else if (TextUtils.equals("http://app:login", url)) {
                 startActivity(new Intent(mContext, LoginActivity.class));
                 finish();
-            } else if (url.startsWith("http://app:share")) {
+            }
+            // start to share
+            else if (url.startsWith("http://app:share")) {
                 String shareUrl = Uri.parse(url).getQueryParameter("url");
                 String shareTitle = Uri.parse(url).getQueryParameter("title");
 
@@ -237,7 +247,9 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
                 if (TextUtils.isEmpty(shareTitle)) shareTitle = title;
 
                 share(shareUrl, shareTitle);
-            } else if (url.startsWith("http://app:service")) {
+            }
+            // start to call phone
+            else if (url.startsWith("http://app:service")) {
                 String hint = Uri.parse(url).getQueryParameter("hint");
                 phone = Uri.parse(url).getQueryParameter("phone");
 
@@ -253,11 +265,15 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
                             mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone)));
                     }
                 });
-            } else if (TextUtils.equals("1", Uri.parse(url).getQueryParameter("canShare"))) {
+            }
+            // show share icon in this page if canShare=1, hide else
+            else if (TextUtils.equals("1", Uri.parse(url).getQueryParameter("canShare"))) {
                 // TODO: share biz
                 toast("this page can be shared.");
                 mWebView.loadUrl(url);
-            } else mWebView.loadUrl(url);
+            }
+            // common load
+            else mWebView.loadUrl(url);
         } catch (Exception e) {
             toast(R.string.web_invalid_url);
         }

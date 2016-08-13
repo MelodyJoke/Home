@@ -1,4 +1,4 @@
-package com.teamsolo.home.structure;
+package com.teamsolo.home.structure.page;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -47,10 +47,20 @@ import java.util.List;
  * author: Melody
  * date: 2016/8/12
  * version: 0.0.0.1
+ * <p>
+ * 登录页，从SharedPreferences中读取上次登录的电话号码（如果有的话）
+ * 从数据库中读取相关信息（是否记住密码，密码等），完成本页面的预填写
+ * <p>
+ * 用户输入电话号码时，根据已输入的部分匹配数据库中以往的电话号码，提供快捷选项（最多提供最近的{@link #PHONE_LIST_SIZE}个）
+ * 用户输入电话号码完成时，查询数据库自动填写密码（如果数据库有相关记录且选择记住密码的话）
+ * <p>
+ * 点击登陆后检查电话号码和密码，进行登陆请求，根据登录结果进行跳转
  */
 public class LoginActivity extends HandlerActivity {
 
     private static final int PERMISSION_CHECK_REQUEST_CODE = 128;
+
+    private static final int PHONE_LIST_SIZE = 5;
 
     private LoadingView mLoadingView;
 
@@ -76,6 +86,8 @@ public class LoginActivity extends HandlerActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setRequestedOrientation(getRequestedOrientation());
 
         getBundle(getIntent());
         initViews();
@@ -167,6 +179,7 @@ public class LoginActivity extends HandlerActivity {
         mSkipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setClickable(false);
                 startActivity(new Intent(mContext, MainActivity.class));
                 finish();
             }
@@ -175,6 +188,8 @@ public class LoginActivity extends HandlerActivity {
         mServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setClickable(false);
+
                 alert(getString(R.string.login_call_for_service), getString(R.string.service_phone),
                         "ok", new DialogInterface.OnClickListener() {
                             @Override
@@ -188,16 +203,32 @@ public class LoginActivity extends HandlerActivity {
                                     mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.service_phone))));
                             }
                         });
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mServiceButton.setClickable(true);
+                    }
+                }, 500);
             }
         });
 
         mHelpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setClickable(false);
+
                 Intent intent = new Intent(mContext, WebViewActivity.class);
                 intent.putExtra("title", getString(R.string.login_help));
                 intent.putExtra("url", NetConstant.HELP_CENTER);
                 startActivity(intent);
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mHelpButton.setClickable(true);
+                    }
+                }, 500);
             }
         });
     }
@@ -208,7 +239,7 @@ public class LoginActivity extends HandlerActivity {
      */
     private void loadUserInfo() {
         if (!phones.isEmpty()) phones.clear();
-        phones.addAll(helper.getPhones(5));
+        phones.addAll(helper.getPhones(PHONE_LIST_SIZE));
         mPhoneEditAdapter.notifyDataSetChanged();
 
         if (TextUtils.isEmpty(phone)) {
@@ -232,13 +263,13 @@ public class LoginActivity extends HandlerActivity {
      * attempt login
      */
     private void attemptLogin() {
-        // TODO:
         mLoginButton.setClickable(false);
         mLoadingView.show(true);
 
         final String phone = mPhoneEdit.getText().toString().trim();
         final String password = mPasswordEdit.getText().toString().trim();
 
+        // check phone and password
         if (!checkPhone(phone) || !checkPassword(password)) {
             mLoginButton.setClickable(true);
             mLoadingView.dismiss();
@@ -248,6 +279,7 @@ public class LoginActivity extends HandlerActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                // TODO: http request
                 User user = new User(phone, password, "", true);
                 helper.insert(user);
 

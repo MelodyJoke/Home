@@ -55,59 +55,84 @@
                 app:placeholderImage="@drawable/portrait_default"
                 app:roundAsCircle="true" />
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin">
+                android:orientation="horizontal">
 
-                <AutoCompleteTextView
-                    android:id="@+id/phone"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/login_phone_hint"
-                    android:imeActionId="0"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:maxLines="1" />
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1">
 
-            </android.support.design.widget.TextInputLayout>
+                    <AutoCompleteTextView
+                        android:id="@+id/phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/login_phone_hint"
+                        android:imeActionId="0"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:maxLines="1" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin">
+                </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
+                <View
+                    android:layout_width="@dimen/light_margin"
+                    android:layout_height="0dp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/login_password_hint"
-                    android:imeActionId="0"
-                    android:imeActionLabel="@string/login_login"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_weight="1">
 
-            </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/login_password_hint"
+                        android:imeActionId="0"
+                        android:imeActionLabel="@string/login_login"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
-            <Button
-                android:id="@+id/login"
-                style="?android:textAppearanceSmall"
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:text="@string/login_login"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/register"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/light_margin"
-                android:text="@string/login_register"
-                android:textStyle="bold"
-                tools:targetApi="lollipop" />
+                <Button
+                    android:id="@+id/login"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/login_login"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="@dimen/light_margin"
+                    android:layout_height="0dp" />
+
+                <Button
+                    android:id="@+id/register"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/login_register"
+                    android:textStyle="bold"
+                    tools:targetApi="lollipop" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/skip"
@@ -115,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/light_margin"
+                android:layout_marginTop="@dimen/heavy_margin"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:gravity="center"
@@ -130,7 +155,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="@dimen/heavy_margin"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
