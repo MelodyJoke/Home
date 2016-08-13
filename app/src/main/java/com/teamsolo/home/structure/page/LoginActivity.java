@@ -264,7 +264,6 @@ public class LoginActivity extends HandlerActivity {
      */
     private void attemptLogin() {
         mLoginButton.setClickable(false);
-        mLoadingView.show(true);
 
         final String phone = mPhoneEdit.getText().toString().trim();
         final String password = mPasswordEdit.getText().toString().trim();
@@ -272,22 +271,18 @@ public class LoginActivity extends HandlerActivity {
         // check phone and password
         if (!checkPhone(phone) || !checkPassword(password)) {
             mLoginButton.setClickable(true);
-            mLoadingView.dismiss();
             return;
         }
 
+        mLoadingView.show(true);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 // TODO: http request
                 User user = new User(phone, password, "", true);
                 helper.insert(user);
-
                 PreferenceManager.getDefaultSharedPreferences(mContext).edit()
                         .putString(PreferenceConst.LOGIN_PHONE, phone).apply();
-
-                mLoginButton.setClickable(true);
-                mLoadingView.dismiss();
 
                 startActivity(new Intent(mContext, MainActivity.class));
                 finish();
