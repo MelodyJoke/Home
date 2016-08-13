@@ -203,13 +203,11 @@ public class LoadActivity extends HandlerActivity {
 
                 // jump to main page or login page base on the result of auto-login attempt
                 loginComplete = true;
-                // TODO:
                 if ((Boolean) msg.obj) {
                     mMessageText.setText(R.string.load_jump_success);
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // TODO:
                             jumpToLogin = false;
                             attemptJump();
                         }
@@ -334,11 +332,15 @@ public class LoadActivity extends HandlerActivity {
         }, 1000);
     }
 
+    /**
+     * attempt jump
+     */
     private void attemptJump() {
         if (!showComplete || !loginComplete || !jumpComplete) return;
 
         if (jumpToLogin) startActivity(new Intent(mContext, LoginActivity.class));
         else startActivity(new Intent());
+        // TODO:
 
         finish();
     }
