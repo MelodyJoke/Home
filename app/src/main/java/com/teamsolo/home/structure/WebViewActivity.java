@@ -278,12 +278,12 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
     }
 
     @Override
-    protected void toast(int msgRes) {
+    public void toast(int msgRes) {
         Snackbar.make(mProgressBar, msgRes, Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override
-    protected void toast(String message) {
+    public void toast(String message) {
         Snackbar.make(mProgressBar, message, Snackbar.LENGTH_INDEFINITE).show();
     }
 }

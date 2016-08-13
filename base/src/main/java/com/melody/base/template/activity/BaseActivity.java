@@ -77,16 +77,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void bindListeners();
 
-    protected void toast(int msgRes) {
+    public void toast(int msgRes) {
         Toast.makeText(mContext, msgRes, Toast.LENGTH_SHORT).show();
     }
 
-    protected void toast(String message) {
+    public void toast(String message) {
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
-    protected void alert(String title, String message,
-                         String positive, AlertDialog.OnClickListener positiveCallback) {
+    public void alert(String title, String message,
+                      String positive, AlertDialog.OnClickListener positiveCallback) {
         alert(title, message, positive, positiveCallback,
                 getString(R.string.alert_cancel), new DialogInterface.OnClickListener() {
                     @Override
@@ -97,10 +97,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 null, null);
     }
 
-    protected void alert(String title, String message,
-                         String positive, AlertDialog.OnClickListener positiveCallback,
-                         String negative, AlertDialog.OnClickListener negativeCallback,
-                         String neutral, AlertDialog.OnClickListener neutralCallback) {
+    public void alert(String title, String message,
+                      String positive, AlertDialog.OnClickListener positiveCallback,
+                      String negative, AlertDialog.OnClickListener negativeCallback,
+                      String neutral, AlertDialog.OnClickListener neutralCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
         if (!TextUtils.isEmpty(title)) builder.setTitle(title);

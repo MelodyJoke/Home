@@ -306,12 +306,12 @@ public class LoginActivity extends HandlerActivity {
     }
 
     @Override
-    protected void toast(int msgRes) {
+    public void toast(int msgRes) {
         Snackbar.make(mPortraitImage, msgRes, Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override
-    protected void toast(String message) {
+    public void toast(String message) {
         Snackbar.make(mPortraitImage, message, Snackbar.LENGTH_INDEFINITE).show();
     }
 }
