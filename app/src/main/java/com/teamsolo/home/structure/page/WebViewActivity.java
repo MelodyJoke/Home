@@ -17,6 +17,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -27,6 +29,7 @@ import android.widget.ProgressBar;
 
 import com.melody.base.template.activity.BaseActivity;
 import com.melody.base.util.BuildUtility;
+import com.melody.base.util.LogUtility;
 import com.teamsolo.home.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +60,11 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
 
     private String url;
 
+    /**
+     * allow share if true
+     */
+    private boolean canShare;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +80,9 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
     @Override
     protected void getBundle(@NotNull Intent intent) {
         title = intent.getStringExtra("title");
+        if (TextUtils.isEmpty(title)) title = getString(R.string.app_name);
         url = intent.getStringExtra("url");
+        canShare = intent.getBooleanExtra("canShare", false);
     }
 
     @Override
@@ -96,7 +106,7 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(TextUtils.isEmpty(title) ? getString(R.string.app_name) : title);
+            actionBar.setTitle(title);
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
@@ -135,6 +145,13 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 loadUrl(view.getUrl());
+                return true;
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                loadUrl(url);
                 return true;
             }
         };
@@ -266,16 +283,11 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
                     }
                 });
             }
-            // show share icon in this page if canShare=1, hide else
-            else if (TextUtils.equals("1", Uri.parse(url).getQueryParameter("canShare"))) {
-                // TODO: share biz
-                toast("this page can be shared.");
-                mWebView.loadUrl(url);
-            }
             // common load
             else mWebView.loadUrl(url);
         } catch (Exception e) {
             toast(R.string.web_invalid_url);
+            LogUtility.e(getClass().getSimpleName(), e.getMessage());
         }
     }
 
@@ -290,7 +302,45 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
     }
 
     protected void share(String shareUrl, String shareTitle) {
-        // TODO:
+        try {
+            Uri.parse(shareUrl);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, shareTitle + ": " + shareUrl);
+
+            startActivity(Intent.createChooser(intent, getString(R.string.share_share_to)));
+        } catch (Exception e) {
+            toast(R.string.web_share_deny);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.web_view, menu);
+        menu.findItem(R.id.action_share).setVisible(canShare);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            share(mWebView.getUrl(), mWebView.getTitle());
+            return true;
+        } else if (id == R.id.action_open_outside) {
+            try {
+                Intent intent = new Intent("android.intent.action.VIEW");
+                intent.setData(Uri.parse(mWebView.getUrl()));
+                startActivity(intent);
+            } catch (Exception e) {
+                toast(R.string.web_open_deny);
+            }
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -9,5 +9,5 @@ package com.teamsolo.home.constant;
 
 public interface NetConstant {
 
-    String HELP_CENTER = "http://www.acfun.tv";
+    String HELP_CENTER = "http://www.baidu.com";
 }

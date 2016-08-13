@@ -156,6 +156,7 @@ public class LoadActivity extends HandlerActivity {
                     Intent intent = new Intent(mContext, WebViewActivity.class);
                     intent.putExtra("url", url);
                     intent.putExtra("title", getString(R.string.web_ad_title));
+                    intent.putExtra("canShare", true);
                     startActivity(intent);
                 }
             }
@@ -344,7 +345,6 @@ public class LoadActivity extends HandlerActivity {
      * attempt jump
      */
     private void attemptJump() {
-        System.out.println("attemptJump: " + (jumpToLogin ? "login" : "main") + " " + showComplete + " & " + loginComplete + " & " + jumpComplete);
         if (!showComplete || !loginComplete || !jumpComplete) return;
 
         if (jumpToLogin) startActivity(new Intent(mContext, LoginActivity.class));

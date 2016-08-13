@@ -140,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/heavy_margin"
+                android:background="?android:selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:gravity="center"
                 android:paddingBottom="8dp"
@@ -168,13 +169,15 @@
                         style="?android:textAppearanceSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="?android:selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:gravity="center"
                         android:paddingBottom="8dp"
                         android:paddingEnd="40dp"
                         android:paddingStart="40dp"
                         android:paddingTop="8dp"
-                        android:text="@string/login_service" />
+                        android:text="@string/login_service"
+                        tools:targetApi="lollipop" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -189,13 +192,15 @@
                         style="?android:textAppearanceSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="?android:selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:gravity="center"
                         android:paddingBottom="8dp"
                         android:paddingEnd="40dp"
                         android:paddingStart="40dp"
                         android:paddingTop="8dp"
-                        android:text="@string/login_help" />
+                        android:text="@string/login_help"
+                        tools:targetApi="lollipop" />
                 </LinearLayout>
             </LinearLayout>
 

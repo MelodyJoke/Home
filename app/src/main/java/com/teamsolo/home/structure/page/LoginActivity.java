@@ -221,6 +221,7 @@ public class LoginActivity extends HandlerActivity {
                 Intent intent = new Intent(mContext, WebViewActivity.class);
                 intent.putExtra("title", getString(R.string.login_help));
                 intent.putExtra("url", NetConstant.HELP_CENTER);
+                intent.putExtra("canShare", true);
                 startActivity(intent);
 
                 handler.postDelayed(new Runnable() {

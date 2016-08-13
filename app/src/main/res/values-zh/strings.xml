@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">场上见</string>
     <string name="loading">加载&#8230;</string>
-
     <string name="permission_deny">没有相关权限.</string>
 
     <!--load page-->
@@ -17,6 +16,8 @@
     <string name="web_back">返回</string>
     <string name="web_invalid_url">不合法的地址.</string>
     <string name="web_ad_title">推广</string>
+    <string name="web_open_deny">当前页面不可在浏览器中打开.</string>
+    <string name="web_share_deny">当前页面不可分享.</string>
 
     <!--login page-->
     <string name="login_title">登录</string>
@@ -30,10 +31,15 @@
     <string name="login_signing">登录&#8230;</string>
     <string name="login_error_phone">电话号码不合法.</string>
     <string name="login_error_password">密码过短.</string>
-    <string name="login_call_for_service">拨打热线联系客服:</string>
+    <string name="login_call_for_service">联系客服:</string>
 
     <!--main page-->
 
+    <!--share-->
+    <string name="share_share_to">分享到</string>
 
+    <!--menu-->
     <string name="action_settings">设置</string>
+    <string name="action_share">分享</string>
+    <string name="action_open_outside">在浏览器中打开</string>
 </resources>
