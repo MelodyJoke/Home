@@ -16,6 +16,7 @@
     <string name="web_empty_url">Empty url.</string>
     <string name="web_back">Back</string>
     <string name="web_invalid_url">Invalid url.</string>
+    <string name="web_ad_title">Ad</string>
 
     <!--login page-->
     <string name="login_title">Sign in</string>

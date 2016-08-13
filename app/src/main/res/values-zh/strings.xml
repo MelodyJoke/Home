@@ -15,6 +15,7 @@
     <string name="web_empty_url">空链接.</string>
     <string name="web_back">返回</string>
     <string name="web_invalid_url">不合法的地址.</string>
+    <string name="web_ad_title">推广</string>
 
     <!--login page-->
     <string name="login_title">登录</string>

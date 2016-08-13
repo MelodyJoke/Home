@@ -9,7 +9,11 @@ package com.teamsolo.home.constant;
 @SuppressWarnings("unused")
 public interface PreferenceConst {
 
+    String LOAD_COVER_JUMP = "load_cover_jump";
+
     String LOAD_COVER_IMAGE_URI = "load_cover_image_uri";
 
     String LOGIN_PHONE = "login_phone";
+
+    String SETTING_LOAD_COVER_JUMP = "setting_load_cover_jump";
 }

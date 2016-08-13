@@ -36,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+
 /**
  * description: load page
  * author: Melody
@@ -46,10 +48,21 @@ import java.util.List;
  * activity加载后，从本地sd卡加载先前下载的启动图，若先前未下载或该图不存在，则显示一张默认的启动图
  * 随后检查并获取若干必需权限（如sd卡读取权限），若权限获取失败，提示并关闭应用
  * 最后尝试自动登录，并根据登录结果完成跳转（登录成功跳转主页，否则跳转登录页）
+ * <p>
+ * 启动图可配置为跳转外链，若设置项中允许启动图跳转且已经配置了启动图跳转，点击启动图即可进行跳转
+ * 启动图默认展示一个固定的时间{@link #AD_SHOW_SECONDS}，以秒为单位
+ * 在完成启动图展示、自动登录流程、点击启动图跳转并返回流程之后，进行跳转
+ * <p>
+ * 若启动图点击跳转返回时其他两项都已经完成，则在一个短暂的延迟之后进行正常跳转
  */
 public class LoadActivity extends HandlerActivity {
 
     private static final int PERMISSION_CHECK_REQUEST_CODE = 126;
+
+    /**
+     * ad show time by second
+     */
+    private static final int AD_SHOW_SECONDS = 4;
 
     /**
      * cover imageView
@@ -74,6 +87,16 @@ public class LoadActivity extends HandlerActivity {
             Manifest.permission.CALL_PHONE
     };
 
+    /**
+     * jump control flags
+     */
+    private boolean jumpComplete = true, loginComplete, showComplete;
+
+    /**
+     * jump to login page if true, jump to main page else
+     */
+    private boolean jumpToLogin;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -88,6 +111,17 @@ public class LoadActivity extends HandlerActivity {
          * start to do some preparations
          */
         handler.sendEmptyMessage(0);
+
+        /**
+         * start to time
+         */
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showComplete = true;
+                attemptJump();
+            }
+        }, AD_SHOW_SECONDS * 1000);
     }
 
     @Override
@@ -107,11 +141,21 @@ public class LoadActivity extends HandlerActivity {
         mCoverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO:
-                Intent intent = new Intent(mContext, WebViewActivity.class);
-                intent.putExtra("url", "http://app:service?hint=Call Test.&phone=18662842653");
-                intent.putExtra("title", "测试");
-                startActivity(intent);
+                view.setClickable(false);
+
+                String url = PreferenceManager.getDefaultSharedPreferences(mContext)
+                        .getString(PreferenceConst.LOAD_COVER_JUMP, "");
+                boolean canJump = PreferenceManager.getDefaultSharedPreferences(mContext)
+                        .getBoolean(PreferenceConst.SETTING_LOAD_COVER_JUMP, false);
+
+                if (canJump && !TextUtils.isEmpty(url)) {
+                    jumpComplete = false;
+
+                    Intent intent = new Intent(mContext, WebViewActivity.class);
+                    intent.putExtra("url", url);
+                    intent.putExtra("title", getString(R.string.web_ad_title));
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -158,6 +202,7 @@ public class LoadActivity extends HandlerActivity {
                 if (msg.obj == null) break;
 
                 // jump to main page or login page base on the result of auto-login attempt
+                loginComplete = true;
                 // TODO:
                 if ((Boolean) msg.obj) {
                     mMessageText.setText(R.string.load_jump_success);
@@ -165,7 +210,8 @@ public class LoadActivity extends HandlerActivity {
                         @Override
                         public void run() {
                             // TODO:
-                            finish();
+                            jumpToLogin = false;
+                            attemptJump();
                         }
                     }, 500);
                 } else {
@@ -173,8 +219,8 @@ public class LoadActivity extends HandlerActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            startActivity(new Intent(mContext, LoginActivity.class));
-                            finish();
+                            jumpToLogin = true;
+                            attemptJump();
                         }
                     }, 500);
                 }
@@ -187,7 +233,7 @@ public class LoadActivity extends HandlerActivity {
      * load cover image from sdcard, else load default one from resource
      */
     private void loadCoverImage() {
-        imageFileName = PreferenceManager.getDefaultSharedPreferences(mContext)
+        imageFileName = getDefaultSharedPreferences(mContext)
                 .getString(PreferenceConst.LOAD_COVER_IMAGE_URI, "");
 
         if (!TextUtils.isEmpty(imageFileName)
@@ -286,6 +332,28 @@ public class LoadActivity extends HandlerActivity {
                 Message.obtain(handler, 4, false).sendToTarget();
             }
         }, 1000);
+    }
+
+    private void attemptJump() {
+        if (!showComplete || !loginComplete || !jumpComplete) return;
+
+        if (jumpToLogin) startActivity(new Intent(mContext, LoginActivity.class));
+        else startActivity(new Intent());
+
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jumpComplete = true;
+                attemptJump();
+            }
+        }, 300);
     }
 
     @Override
