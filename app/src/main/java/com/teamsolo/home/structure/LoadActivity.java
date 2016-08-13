@@ -109,7 +109,7 @@ public class LoadActivity extends HandlerActivity {
             public void onClick(View view) {
                 // TODO:
                 Intent intent = new Intent(mContext, WebViewActivity.class);
-                intent.putExtra("url", "app:login");
+                intent.putExtra("url", "http://app:service?hint=Call Test.&phone=18662842653");
                 intent.putExtra("title", "测试");
                 startActivity(intent);
             }

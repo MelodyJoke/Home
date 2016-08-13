@@ -9,6 +9,9 @@ import com.melody.base.util.LogUtility;
 import com.teamsolo.home.bean.User;
 import com.teamsolo.home.constant.DatabaseConstant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * description: user db helper
  * author: Melody
@@ -42,6 +45,7 @@ public class UserDbHelper extends BaseDbHelper {
         values.put(DatabaseConstant.TABLE_USER_FIELDS[2][0], user.rememberPassword ? user.password : "");
         values.put(DatabaseConstant.TABLE_USER_FIELDS[3][0], user.portrait);
         values.put(DatabaseConstant.TABLE_USER_FIELDS[4][0], user.rememberPassword ? 1 : 0);
+        values.put(DatabaseConstant.TABLE_USER_FIELDS[5][0], System.currentTimeMillis());
 
         boolean result = db.insert(tableName, values) != -1;
         closeDB();
@@ -62,6 +66,7 @@ public class UserDbHelper extends BaseDbHelper {
         values.put(DatabaseConstant.TABLE_USER_FIELDS[2][0], user.rememberPassword ? user.password : "");
         values.put(DatabaseConstant.TABLE_USER_FIELDS[3][0], user.portrait);
         values.put(DatabaseConstant.TABLE_USER_FIELDS[4][0], user.rememberPassword ? 1 : 0);
+        values.put(DatabaseConstant.TABLE_USER_FIELDS[5][0], System.currentTimeMillis());
 
         db.update(tableName, values, new String[]{DatabaseConstant.TABLE_USER_FIELDS[1][0]}, new String[]{user.phone});
         closeDB();
@@ -83,11 +88,12 @@ public class UserDbHelper extends BaseDbHelper {
             return null;
         }
 
-        User user = new User();
-        user.phone = phone;
+        User user = null;
         if (cursor.moveToFirst()) {
             do {
                 try {
+                    if (user == null) user = new User();
+                    user.phone = cursor.getString(cursor.getColumnIndex(DatabaseConstant.TABLE_USER_FIELDS[1][0]));
                     user.password = cursor.getString(cursor.getColumnIndex(DatabaseConstant.TABLE_USER_FIELDS[2][0]));
                     user.portrait = cursor.getString(cursor.getColumnIndex(DatabaseConstant.TABLE_USER_FIELDS[3][0]));
                     user.rememberPassword = cursor.getInt(cursor.getColumnIndex(DatabaseConstant.TABLE_USER_FIELDS[4][0])) == 1;
@@ -100,5 +106,38 @@ public class UserDbHelper extends BaseDbHelper {
         closeDB();
 
         return user;
+    }
+
+    /**
+     * get phones logged before
+     *
+     * @param size size
+     * @return the phones list
+     */
+    public List<String> getPhones(int size) {
+        if (size <= 0) return null;
+
+        Cursor cursor = db.rawQuery(tableName, "select " + DatabaseConstant.TABLE_USER_FIELDS[1][0] + " from " + tableName + " order by " + DatabaseConstant.TABLE_USER_FIELDS[5][0] + " desc limit 0," + size);
+
+        if (cursor == null) {
+            closeDB();
+            return null;
+        }
+
+        List<String> result = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+                    String phone = cursor.getString(cursor.getColumnIndex(DatabaseConstant.TABLE_USER_FIELDS[1][0]));
+                    if (!TextUtils.isEmpty(phone)) result.add(phone);
+                } catch (Exception e) {
+                    LogUtility.e(getClass().getSimpleName(), e.getMessage());
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        closeDB();
+
+        return result;
     }
 }

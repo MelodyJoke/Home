@@ -1,6 +1,7 @@
 package com.melody.base.template.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,12 +10,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.transition.Explode;
 import android.transition.Transition;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
+import com.melody.base.R;
 import com.melody.base.template.application.BaseApplication;
 import com.melody.base.util.BuildUtility;
 
@@ -71,6 +76,44 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initViews();
 
     protected abstract void bindListeners();
+
+    protected void toast(int msgRes) {
+        Toast.makeText(mContext, msgRes, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void toast(String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void alert(String title, String message,
+                         String positive, AlertDialog.OnClickListener positiveCallback) {
+        alert(title, message, positive, positiveCallback,
+                getString(R.string.alert_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int buttonId) {
+
+                    }
+                },
+                null, null);
+    }
+
+    protected void alert(String title, String message,
+                         String positive, AlertDialog.OnClickListener positiveCallback,
+                         String negative, AlertDialog.OnClickListener negativeCallback,
+                         String neutral, AlertDialog.OnClickListener neutralCallback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        if (!TextUtils.isEmpty(title)) builder.setTitle(title);
+        if (!TextUtils.isEmpty(message)) builder.setMessage(message);
+        if (!TextUtils.isEmpty(positive) && positiveCallback != null)
+            builder.setPositiveButton(positive, positiveCallback);
+        if (!TextUtils.isEmpty(negative) && negativeCallback != null)
+            builder.setNegativeButton(negative, negativeCallback);
+        if (!TextUtils.isEmpty(neutral) && neutralCallback != null)
+            builder.setNeutralButton(neutral, negativeCallback);
+
+        builder.create().show();
+    }
 
     /**
      * enable navigation tint mode

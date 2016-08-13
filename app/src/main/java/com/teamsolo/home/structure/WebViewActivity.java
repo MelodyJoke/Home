@@ -1,12 +1,18 @@
 package com.teamsolo.home.structure;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -34,11 +40,15 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int PERMISSION_CHECK_REQUEST_CODE = 127;
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private WebView mWebView;
 
     private ProgressBar mProgressBar;
+
+    private String phone;
 
     /**
      * title to show on toolbar, show app name if it is empty
@@ -208,16 +218,72 @@ public class WebViewActivity extends BaseActivity implements SwipeRefreshLayout.
      * @param url the url
      */
     protected void filterUrl(String url) {
-        if (TextUtils.equals("app:finish", url)) {
-            if (BuildUtility.isRequired(Build.VERSION_CODES.LOLLIPOP)) finishAfterTransition();
-            else finish();
-        } else if (TextUtils.equals("app:back", url)) onBackPressed();
-        else if (TextUtils.equals("app:refresh", url) && !mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(true);
-            onRefresh();
-        } else if (TextUtils.equals("app:login", url)) {
-            startActivity(new Intent(mContext, LoginActivity.class));
-            finish();
-        } else mWebView.loadUrl(url);
+        try {
+            if (TextUtils.equals("http://app:finish", url)) {
+                if (BuildUtility.isRequired(Build.VERSION_CODES.LOLLIPOP)) finishAfterTransition();
+                else finish();
+            } else if (TextUtils.equals("http://app:back", url)) onBackPressed();
+            else if (TextUtils.equals("http://app:refresh", url) && !mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            } else if (TextUtils.equals("http://app:login", url)) {
+                startActivity(new Intent(mContext, LoginActivity.class));
+                finish();
+            } else if (url.startsWith("http://app:share")) {
+                String shareUrl = Uri.parse(url).getQueryParameter("url");
+                String shareTitle = Uri.parse(url).getQueryParameter("title");
+
+                if (TextUtils.isEmpty(shareUrl)) shareUrl = mWebView.getUrl();
+                if (TextUtils.isEmpty(shareTitle)) shareTitle = title;
+
+                share(shareUrl, shareTitle);
+            } else if (url.startsWith("http://app:service")) {
+                String hint = Uri.parse(url).getQueryParameter("hint");
+                phone = Uri.parse(url).getQueryParameter("phone");
+
+                alert(hint, phone, "ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int buttonId) {
+                        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
+                            if (BuildUtility.isRequired(Build.VERSION_CODES.M))
+                                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_CHECK_REQUEST_CODE);
+                            else
+                                mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone)));
+                        else
+                            mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone)));
+                    }
+                });
+            } else if (TextUtils.equals("1", Uri.parse(url).getQueryParameter("canShare"))) {
+                // TODO: share biz
+                toast("this page can be shared.");
+                mWebView.loadUrl(url);
+            } else mWebView.loadUrl(url);
+        } catch (Exception e) {
+            toast(R.string.web_invalid_url);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_CHECK_REQUEST_CODE
+                && ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
+            mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone)));
+        else toast(R.string.permission_deny);
+    }
+
+    protected void share(String shareUrl, String shareTitle) {
+        // TODO:
+    }
+
+    @Override
+    protected void toast(int msgRes) {
+        Snackbar.make(mProgressBar, msgRes, Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    @Override
+    protected void toast(String message) {
+        Snackbar.make(mProgressBar, message, Snackbar.LENGTH_INDEFINITE).show();
     }
 }

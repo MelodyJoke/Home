@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">场上见</string>
     <string name="loading">加载&#8230;</string>
+    <string name="permission_deny">没有相关权限.</string>
 
     <!--load page-->
     <string name="load_load_cover">打开场馆&#8230;</string>
@@ -13,6 +14,7 @@
     <!--webView page-->
     <string name="web_empty_url">空链接.</string>
     <string name="web_back">返回</string>
+    <string name="web_invalid_url">不合法的地址.</string>
 
     <!--login page-->
     <string name="login_title">登录</string>
@@ -24,4 +26,7 @@
     <string name="login_service">联系客服</string>
     <string name="login_help">帮助中心</string>
     <string name="login_signing">登录&#8230;</string>
+    <string name="login_error_phone">电话号码不合法.</string>
+    <string name="login_error_password">密码过短.</string>
+    <string name="login_call_for_service">拨打热线联系客服:</string>
 </resources>

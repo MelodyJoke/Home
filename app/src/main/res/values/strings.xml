@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Home</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="service_phone">18662842653</string>
+    <string name="permission_deny">Permission denied.</string>
 
     <!--load page-->
     <string name="load_load_cover">Opening gate&#8230;</string>
@@ -13,6 +15,7 @@
     <!--webView page-->
     <string name="web_empty_url">Empty url.</string>
     <string name="web_back">Back</string>
+    <string name="web_invalid_url">Invalid url.</string>
 
     <!--login page-->
     <string name="login_title">Sign in</string>
@@ -24,4 +27,7 @@
     <string name="login_service">Call</string>
     <string name="login_help">Help</string>
     <string name="login_signing">Sign in&#8230;</string>
+    <string name="login_error_phone">Invalid phone.</string>
+    <string name="login_error_password">Invalid password.</string>
+    <string name="login_call_for_service">Call for service:</string>
 </resources>

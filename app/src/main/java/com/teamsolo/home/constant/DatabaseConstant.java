@@ -22,6 +22,7 @@ public interface DatabaseConstant {
             {"phone", "text not null"},
             {"password", "text"},
             {"portrait", "text"},
-            {"remember", "integer default 0"}
+            {"remember", "integer default 0"},
+            {"last", "text not null"}
     };
 }

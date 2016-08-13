@@ -186,6 +186,23 @@ public class DbHelper extends SQLiteOpenHelper {
         return "delete from " + tableName + " where " + strSql;
     }
 
+    public Cursor query(String tableName, String selection) {
+        Cursor cursor = null;
+        db = this.getWritableDatabase();
+        db.beginTransaction();
+
+        try {
+            cursor = db.query(tableName, null, selection, null, null, null, ORDER_BY_ID_DESC);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            LogUtility.e(TAG, e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+
+        return cursor;
+    }
+
     public Cursor query(String tableName, String selection, String orderBy) {
         Cursor cursor = null;
         db = this.getWritableDatabase();
@@ -202,13 +219,23 @@ public class DbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor query(String tableName, String selection) {
+    public Cursor query(String tableName, String[] whereArgs, String[] whereArgsValues, String[] column, String orderBy) {
         Cursor cursor = null;
-        db = this.getWritableDatabase();
-        db.beginTransaction();
+        db = this.getReadableDatabase();
 
+        db.beginTransaction();
         try {
-            cursor = db.query(tableName, null, selection, null, null, null, ORDER_BY_ID_DESC);
+            if (whereArgs == null)
+                cursor = db.query(tableName, column, null, null, null, null, ORDER_BY_ID_DESC);
+            else {
+                if (whereArgs.length == 1) {
+                    if (whereArgsValues.length == 1)
+                        cursor = db.query(tableName, column, whereArgs[0] + "= ?", whereArgsValues, null, null, ORDER_BY_ID_DESC);
+                    else
+                        cursor = db.query(tableName, column, createSQL(whereArgs, whereArgsValues, whereArgsValues.length), null, null, null, ORDER_BY_ID_DESC);
+                } else
+                    cursor = db.query(tableName, column, createSQL(whereArgs, whereArgsValues, whereArgs.length), null, null, null, ORDER_BY_ID_DESC);
+            }
             db.setTransactionSuccessful();
         } catch (Exception e) {
             LogUtility.e(TAG, e.getMessage());
@@ -248,34 +275,6 @@ public class DbHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
-    }
-
-    public Cursor query(String tableName, String[] whereArgs,
-                        String[] whereArgsValues, String[] column, String orderBy) {
-        Cursor cursor = null;
-        db = this.getReadableDatabase();
-
-        db.beginTransaction();
-        try {
-            if (whereArgs == null)
-                cursor = db.query(tableName, column, null, null, null, null, ORDER_BY_ID_DESC);
-            else {
-                if (whereArgs.length == 1) {
-                    if (whereArgsValues.length == 1)
-                        cursor = db.query(tableName, column, whereArgs[0] + "= ?", whereArgsValues, null, null, ORDER_BY_ID_DESC);
-                    else
-                        cursor = db.query(tableName, column, createSQL(whereArgs, whereArgsValues, whereArgsValues.length), null, null, null, ORDER_BY_ID_DESC);
-                } else
-                    cursor = db.query(tableName, column, createSQL(whereArgs, whereArgsValues, whereArgs.length), null, null, null, ORDER_BY_ID_DESC);
-            }
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            LogUtility.e(TAG, e.getMessage());
-        } finally {
-            db.endTransaction();
-        }
-
-        return cursor;
     }
 
     public void closeDatabase() {
