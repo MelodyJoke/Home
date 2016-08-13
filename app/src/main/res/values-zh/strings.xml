@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">场上见</string>
     <string name="loading">加载&#8230;</string>
+
     <string name="permission_deny">没有相关权限.</string>
 
     <!--load page-->
@@ -32,5 +33,7 @@
     <string name="login_call_for_service">拨打热线联系客服:</string>
 
     <!--main page-->
+
+
     <string name="action_settings">设置</string>
 </resources>
