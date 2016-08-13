@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.teamsolo.home">
 
-    <!--internet-->
+    <!-- internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--sdcard-->
+    <!-- sdcard -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!--connection-->
+    <!-- connection -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
@@ -20,7 +20,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--load page-->
+
+        <!-- load page -->
         <activity
             android:name=".structure.LoadActivity"
             android:theme="@style/LaunchTheme">
@@ -29,7 +30,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -46,17 +46,22 @@
             </intent-filter>
         </activity>
 
-        <!--webView page-->
+        <!-- webView page -->
         <activity
             android:name=".structure.WebViewActivity"
             android:configChanges="orientation|locale|screenSize|layoutDirection" />
 
-        <!--login page-->
+        <!-- login page -->
         <activity
             android:name=".structure.LoginActivity"
             android:configChanges="orientation|locale|screenSize|layoutDirection"
             android:label="@string/login_title"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+        <!--main page-->
+        <activity
+            android:name=".structure.MainActivity"
+            android:label="@string/title_activity_main" />
     </application>
 
 </manifest>

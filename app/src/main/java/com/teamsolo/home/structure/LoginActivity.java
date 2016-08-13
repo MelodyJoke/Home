@@ -167,7 +167,8 @@ public class LoginActivity extends HandlerActivity {
         mSkipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO:
+                startActivity(new Intent(mContext, MainActivity.class));
+                finish();
             }
         });
 
@@ -231,6 +232,7 @@ public class LoginActivity extends HandlerActivity {
      * attempt login
      */
     private void attemptLogin() {
+        // TODO:
         mLoginButton.setClickable(false);
         mLoadingView.show(true);
 
@@ -254,6 +256,9 @@ public class LoginActivity extends HandlerActivity {
 
                 mLoginButton.setClickable(true);
                 mLoadingView.dismiss();
+
+                startActivity(new Intent(mContext, MainActivity.class));
+                finish();
             }
         }, 1500);
     }

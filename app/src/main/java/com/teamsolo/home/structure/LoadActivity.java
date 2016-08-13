@@ -339,8 +339,7 @@ public class LoadActivity extends HandlerActivity {
         if (!showComplete || !loginComplete || !jumpComplete) return;
 
         if (jumpToLogin) startActivity(new Intent(mContext, LoginActivity.class));
-        else startActivity(new Intent());
-        // TODO:
+        else startActivity(new Intent(mContext, MainActivity.class));
 
         finish();
     }

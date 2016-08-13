@@ -31,4 +31,10 @@
     <string name="login_error_phone">Invalid phone.</string>
     <string name="login_error_password">Invalid password.</string>
     <string name="login_call_for_service">Call for service:</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
