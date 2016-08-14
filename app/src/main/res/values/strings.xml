@@ -3,6 +3,7 @@
     <string name="loading">Loading&#8230;</string>
     <string name="service_phone">18662842653</string>
     <string name="permission_deny">Permission denied.</string>
+    <string name="collect_info">Collecting info&#8230;</string>
 
     <!--load page-->
     <string name="load_load_cover">Opening gate&#8230;</string>
@@ -19,6 +20,8 @@
     <string name="web_ad_title">Ad</string>
     <string name="web_open_deny">Current page cannot open in web browser.</string>
     <string name="web_share_deny">Current page cannot share.</string>
+    <string name="web_help_title">Help</string>
+    <string name="web_agreement_title">Agreement</string>
 
     <!--login page-->
     <string name="login_title">Sign in</string>
@@ -33,6 +36,15 @@
     <string name="login_error_phone">Invalid phone.</string>
     <string name="login_error_password">Invalid password.</string>
     <string name="login_call_for_service">Call for service:</string>
+
+    <!--register page-->
+    <string name="register_title">Sign up</string>
+    <string name="register_confirm_hint">Confirm</string>
+    <string name="register_register">Sing up</string>
+    <string name="register_agreement">Agreement</string>
+    <string name="register_signing">Sign up&#8230;</string>
+    <string name="register_load_phone_failed">Cannot get phone number.</string>
+    <string name="register_error_confirm">Different from password.</string>
 
     <!--main page-->
     <string name="navigation_drawer_open">Open navigation drawer</string>

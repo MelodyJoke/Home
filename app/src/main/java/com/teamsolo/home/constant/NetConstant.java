@@ -10,4 +10,6 @@ package com.teamsolo.home.constant;
 public interface NetConstant {
 
     String HELP_CENTER = "http://www.baidu.com";
+
+    String AGREEMENT_PAGE = "http://www.baidu.com";
 }

@@ -86,7 +86,8 @@ public class LoadActivity extends HandlerActivity {
      */
     private String[] requiredPermissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CALL_PHONE
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_SMS
     };
 
     /**

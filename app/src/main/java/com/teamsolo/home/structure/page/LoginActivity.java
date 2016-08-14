@@ -99,7 +99,7 @@ public class LoginActivity extends HandlerActivity {
     @Override
     protected void getBundle(@NotNull Intent intent) {
         phone = PreferenceManager.getDefaultSharedPreferences(mContext).getString(PreferenceConst.LOGIN_PHONE, "");
-        helper = new UserDbHelper(mContext);
+        if (helper == null) helper = new UserDbHelper(mContext);
     }
 
     @Override
@@ -122,8 +122,7 @@ public class LoginActivity extends HandlerActivity {
         mPhoneEditAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_dropdown_item_1line, phones);
 
         mLoadingView.setReactView(findViewById(R.id.content));
-        mLoadingView.configHint(getString(R.string.login_signing));
-        mLoadingView.show(true);
+        mLoadingView.configHint(getString(R.string.collect_info)).show(true);
         mPhoneEdit.setText(DisplayUtility.showString(phone, ""));
         mPhoneEdit.setAdapter(mPhoneEditAdapter);
     }
@@ -172,7 +171,7 @@ public class LoginActivity extends HandlerActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO:
+                startActivity(new Intent(mContext, RegisterActivity.class));
             }
         });
 
@@ -219,9 +218,9 @@ public class LoginActivity extends HandlerActivity {
                 view.setClickable(false);
 
                 Intent intent = new Intent(mContext, WebViewActivity.class);
-                intent.putExtra("title", getString(R.string.login_help));
+                intent.putExtra("title", getString(R.string.web_help_title));
                 intent.putExtra("url", NetConstant.HELP_CENTER);
-                intent.putExtra("canShare", true);
+                intent.putExtra("canShare", false);
                 startActivity(intent);
 
                 handler.postDelayed(new Runnable() {
@@ -275,7 +274,7 @@ public class LoginActivity extends HandlerActivity {
             return;
         }
 
-        mLoadingView.show(true);
+        mLoadingView.configHint(getString(R.string.login_signing)).show(true);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -331,6 +330,15 @@ public class LoginActivity extends HandlerActivity {
                 && ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
             mContext.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getString(R.string.service_phone))));
         else toast(R.string.permission_deny);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        mLoadingView.configHint(getString(R.string.collect_info)).show(true);
+        getBundle(intent);
+        loadUserInfo();
     }
 
     @Override

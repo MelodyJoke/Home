@@ -2,6 +2,7 @@
     <string name="app_name">场上见</string>
     <string name="loading">加载&#8230;</string>
     <string name="permission_deny">没有相关权限.</string>
+    <string name="collect_info">收集信息&#8230;</string>
 
     <!--load page-->
     <string name="load_load_cover">打开场馆&#8230;</string>
@@ -18,6 +19,8 @@
     <string name="web_ad_title">推广</string>
     <string name="web_open_deny">当前页面不可在浏览器中打开.</string>
     <string name="web_share_deny">当前页面不可分享.</string>
+    <string name="web_help_title">帮助中心</string>
+    <string name="web_agreement_title">用户协议</string>
 
     <!--login page-->
     <string name="login_title">登录</string>
@@ -32,6 +35,15 @@
     <string name="login_error_phone">电话号码不合法.</string>
     <string name="login_error_password">密码过短.</string>
     <string name="login_call_for_service">联系客服:</string>
+
+    <!--register page-->
+    <string name="register_title">注册</string>
+    <string name="register_confirm_hint">密码确认</string>
+    <string name="register_register">注册</string>
+    <string name="register_agreement">阅读用户协议</string>
+    <string name="register_signing">注册&#8230;</string>
+    <string name="register_load_phone_failed">无法获取手机号码.</string>
+    <string name="register_error_confirm">两次输入不一致.</string>
 
     <!--main page-->
 
