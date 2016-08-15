@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.melody.base.template.activity.HandlerActivity;
 import com.teamsolo.home.R;
+import com.teamsolo.home.structure.widget.LoadingView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,11 +30,17 @@ import org.jetbrains.annotations.NotNull;
 public class MainActivity extends HandlerActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 
-    private FloatingActionButton fab;
+    private LoadingView mLoadingView;
 
-    private DrawerLayout drawer;
+    private FloatingActionButton mFab;
 
-    private NavigationView navigationView;
+    private DrawerLayout mDrawerLayout;
+
+    private NavigationView mNavigationView;
+
+    private BottomNavigationBar mBottomNavigationBar;
+
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,20 @@ public class MainActivity extends HandlerActivity implements
         getBundle(getIntent());
         initViews();
         bindListeners();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBottomNavigationBar.hide();
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingView.dismiss();
+            }
+        }, 3000);
     }
 
     @Override
@@ -60,28 +82,44 @@ public class MainActivity extends HandlerActivity implements
         });
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        mLoadingView = (LoadingView) findViewById(R.id.loading);
+        mLoadingView.setReactView(findViewById(R.id.content));
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom);
+        mTabLayout = (TabLayout) findViewById(R.id.tab);
+
+        initBottomNavigationBar();
+        initTabLayout();
+    }
+
+    private void initBottomNavigationBar() {
+        mBottomNavigationBar.initialise();
+    }
+
+    private void initTabLayout() {
+
     }
 
     @Override
     protected void bindListeners() {
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (mBottomNavigationBar.isHidden()) mBottomNavigationBar.show();
+                else mBottomNavigationBar.hide();
             }
         });
 
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -91,7 +129,8 @@ public class MainActivity extends HandlerActivity implements
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START))
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         else super.onBackPressed();
     }
 
@@ -130,7 +169,7 @@ public class MainActivity extends HandlerActivity implements
 
         }
 
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
