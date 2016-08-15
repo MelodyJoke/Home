@@ -302,8 +302,14 @@ public class LoginActivity extends HandlerActivity {
                 PreferenceManager.getDefaultSharedPreferences(mContext).edit()
                         .putString(PreferenceConst.LOGIN_PHONE, phone).apply();
 
-                startActivity(new Intent(mContext, MainActivity.class));
-                finish();
+                mLoadingView.hideProgress();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(mContext, MainActivity.class));
+                        finish();
+                    }
+                }, 600);
             }
         }, 1500);
     }
