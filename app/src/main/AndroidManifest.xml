@@ -65,7 +65,7 @@
             android:label="@string/login_title"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <!-- register page -->
         <activity
@@ -73,7 +73,7 @@
             android:configChanges="orientation|locale|screenSize|layoutDirection|keyboardHidden"
             android:label="@string/register_title"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <!--main page-->
         <activity

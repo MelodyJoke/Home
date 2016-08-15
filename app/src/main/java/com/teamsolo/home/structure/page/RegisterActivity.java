@@ -149,6 +149,7 @@ public class RegisterActivity extends HandlerActivity {
             if (!TextUtils.isEmpty(phone)) {
                 if (phone.length() > 11) phone = phone.substring(phone.length() - 11);
                 mPhoneEdit.setText(phone);
+                mPasswordEdit.requestFocus();
             } else toast(R.string.register_load_phone_failed);
         } else toast(R.string.register_load_phone_failed);
 

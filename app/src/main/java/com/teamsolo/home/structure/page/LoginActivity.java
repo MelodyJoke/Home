@@ -248,6 +248,7 @@ public class LoginActivity extends HandlerActivity {
         }
 
         mPhoneEdit.setText(phone);
+        mPasswordEdit.requestFocus();
         User user = helper.getUser(phone);
 
         if (user != null) {
