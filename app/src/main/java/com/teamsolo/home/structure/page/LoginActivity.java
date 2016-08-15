@@ -93,7 +93,12 @@ public class LoginActivity extends HandlerActivity {
         initViews();
         bindListeners();
 
-        loadUserInfo();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadUserInfo();
+            }
+        }, 300);
     }
 
     @Override
@@ -122,7 +127,7 @@ public class LoginActivity extends HandlerActivity {
         mPhoneEditAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_dropdown_item_1line, phones);
 
         mLoadingView.setReactView(findViewById(R.id.content));
-        mLoadingView.configHint(getString(R.string.collect_info)).show(true);
+        mLoadingView.configHint(getString(R.string.collect_info));
         mPhoneEdit.setText(DisplayUtility.showString(phone, ""));
         mPhoneEdit.setAdapter(mPhoneEditAdapter);
     }
@@ -238,12 +243,19 @@ public class LoginActivity extends HandlerActivity {
      * load portrait
      */
     private void loadUserInfo() {
+        mLoadingView.show(true);
+
         if (!phones.isEmpty()) phones.clear();
         phones.addAll(helper.getPhones(PHONE_LIST_SIZE));
         mPhoneEditAdapter.notifyDataSetChanged();
 
         if (TextUtils.isEmpty(phone)) {
-            mLoadingView.dismiss();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadingView.dismiss();
+                }
+            }, 1500);
             return;
         }
 
@@ -257,7 +269,12 @@ public class LoginActivity extends HandlerActivity {
                 mPortraitImage.setImageURI(Uri.parse(user.portrait));
         }
 
-        mLoadingView.dismiss();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingView.dismiss();
+            }
+        }, 1500);
     }
 
     /**
@@ -337,9 +354,13 @@ public class LoginActivity extends HandlerActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        mLoadingView.configHint(getString(R.string.collect_info)).show(true);
         getBundle(intent);
-        loadUserInfo();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadUserInfo();
+            }
+        }, 300);
     }
 
     @Override

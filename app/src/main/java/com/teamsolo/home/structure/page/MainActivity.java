@@ -54,16 +54,16 @@ public class MainActivity extends HandlerActivity implements
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mBottomNavigationBar.hide();
+                mLoadingView.show(true);
             }
-        }, 1000);
-
+        }, 300);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mLoadingView.dismiss();
+                initBottomNavigationBar();
+                initTabLayout();
             }
-        }, 3000);
+        }, 600);
     }
 
     @Override
@@ -84,6 +84,7 @@ public class MainActivity extends HandlerActivity implements
 
         mLoadingView = (LoadingView) findViewById(R.id.loading);
         mLoadingView.setReactView(findViewById(R.id.content));
+        mLoadingView.setVisibility(View.GONE);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -94,15 +95,28 @@ public class MainActivity extends HandlerActivity implements
         toggle.syncState();
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom);
-        mTabLayout = (TabLayout) findViewById(R.id.tab);
 
-        initBottomNavigationBar();
-        initTabLayout();
+        mBottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom);
+
+        mTabLayout = (TabLayout) findViewById(R.id.tab);
     }
 
     private void initBottomNavigationBar() {
+        mBottomNavigationBar.hide();
         mBottomNavigationBar.initialise();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mBottomNavigationBar.show();
+            }
+        }, 3000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingView.dismiss();
+                mFab.setClickable(true);
+            }
+        }, 3600);
     }
 
     private void initTabLayout() {
@@ -114,10 +128,19 @@ public class MainActivity extends HandlerActivity implements
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mFab.setClickable(false);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mFab.setClickable(true);
+                    }
+                }, 300);
+
                 if (mBottomNavigationBar.isHidden()) mBottomNavigationBar.show();
                 else mBottomNavigationBar.hide();
             }
         });
+        mFab.setClickable(false);
 
         mNavigationView.setNavigationItemSelectedListener(this);
     }

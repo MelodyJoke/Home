@@ -59,7 +59,12 @@ public class RegisterActivity extends HandlerActivity {
         initViews();
         bindListeners();
 
-        loadPhone();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadPhone();
+            }
+        }, 300);
     }
 
     @Override
@@ -94,7 +99,7 @@ public class RegisterActivity extends HandlerActivity {
         mAgreementButton = findViewById(R.id.agreement);
 
         mLoadingView.setReactView(findViewById(R.id.content));
-        mLoadingView.configHint(getString(R.string.collect_info)).show(true);
+        mLoadingView.configHint(getString(R.string.collect_info));
     }
 
     @Override
@@ -141,6 +146,8 @@ public class RegisterActivity extends HandlerActivity {
      */
     @SuppressLint("HardwareIds")
     private void loadPhone() {
+        mLoadingView.show(true);
+
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             TelephonyManager manager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
@@ -149,11 +156,15 @@ public class RegisterActivity extends HandlerActivity {
             if (!TextUtils.isEmpty(phone)) {
                 if (phone.length() > 11) phone = phone.substring(phone.length() - 11);
                 mPhoneEdit.setText(phone);
-                mPasswordEdit.requestFocus();
             } else toast(R.string.register_load_phone_failed);
         } else toast(R.string.register_load_phone_failed);
 
-        mLoadingView.dismiss();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingView.dismiss();
+            }
+        }, 1500);
     }
 
     /**
