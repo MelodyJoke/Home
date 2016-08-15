@@ -10,7 +10,7 @@ import com.melody.base.template.application.UncaughtExceptionHandler;
  * date: 2016/8/10
  * version: 0.0.0.1
  */
-public class App extends BaseApplication {
+public class HomeApplication extends BaseApplication {
 
     @Override
     public void onCreate() {

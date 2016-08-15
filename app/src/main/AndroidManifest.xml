@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
-        android:name=".application.App"
+        android:name=".application.HomeApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"

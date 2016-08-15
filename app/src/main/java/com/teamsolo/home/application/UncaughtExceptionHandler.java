@@ -14,6 +14,6 @@ public class UncaughtExceptionHandler extends
 
     @Override
     protected void subPerform() {
-        Toast.makeText(App.getInstanceContext(), "Oh no! Crash...", Toast.LENGTH_LONG).show();
+        Toast.makeText(HomeApplication.getInstanceContext(), "Oh no! Crash...", Toast.LENGTH_LONG).show();
     }
 }

@@ -88,6 +88,10 @@ public class LoadingView extends FrameLayout {
         if (mReactView != null) mReactView.setVisibility(VISIBLE);
     }
 
+    public void hideProgress() {
+        mProgressBar.setVisibility(View.INVISIBLE);
+    }
+
     public void show(boolean showProgressBar) {
         mProgressBar.setVisibility(showProgressBar ? VISIBLE : GONE);
         mHintImage.setVisibility(showProgressBar ? GONE : VISIBLE);

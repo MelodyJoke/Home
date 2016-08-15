@@ -64,7 +64,7 @@ public class LoadActivity extends HandlerActivity {
     /**
      * ad show time by second
      */
-    private static final int AD_SHOW_SECONDS = 4;
+    private static final int AD_SHOW_SECONDS = 1;
 
     /**
      * cover imageView
@@ -178,7 +178,12 @@ public class LoadActivity extends HandlerActivity {
             case 1:
                 // check permissions
                 mMessageText.setText(R.string.load_check_permission);
-                checkPermissions();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkPermissions();
+                    }
+                }, 300);
                 break;
 
             case 2:
@@ -193,13 +198,18 @@ public class LoadActivity extends HandlerActivity {
                             finish();
                         }
                     }, 500);
-                } else handler.sendEmptyMessage(3);
+                } else handler.sendEmptyMessageDelayed(3, 300);
                 break;
 
             case 3:
                 // auto-login attempt
                 mMessageText.setText(R.string.load_auto_login);
-                attemptLogin();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        attemptLogin();
+                    }
+                }, 300);
                 break;
 
             case 4:
@@ -245,7 +255,12 @@ public class LoadActivity extends HandlerActivity {
         else mCoverImage.setImageResource(R.mipmap.load_cover_image_default);
 
         applyTheme();
-        handler.sendEmptyMessage(1);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(1);
+            }
+        }, 300);
     }
 
     /**
